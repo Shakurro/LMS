@@ -166,6 +166,20 @@ const Login: React.FC = () => {
             >
               Sarah Müller (LMS Manager)
             </button>
+            <button
+              onClick={() => handleDemoLogin('admin@company.com')}
+              disabled={isLoading}
+              className="w-full py-2 px-4 border border-red-300 rounded-md shadow-sm text-sm font-medium text-red-700 bg-red-50 hover:bg-red-100 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 disabled:opacity-50"
+            >
+              Admin User (System Administrator)
+            </button>
+            <button
+              onClick={() => handleDemoLogin('maria.admin@company.com')}
+              disabled={isLoading}
+              className="w-full py-2 px-4 border border-red-300 rounded-md shadow-sm text-sm font-medium text-red-700 bg-red-50 hover:bg-red-100 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 disabled:opacity-50"
+            >
+              Maria Admin (HR Administrator)
+            </button>
           </div>
         </div>
       </div>

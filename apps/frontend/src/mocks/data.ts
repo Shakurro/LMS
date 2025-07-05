@@ -5,7 +5,7 @@ export interface User {
   name: string;
   email: string;
   department: string;
-  role: 'employee' | 'manager' | 'lms_manager';
+  role: 'employee' | 'manager' | 'lms_manager' | 'admin';
   managerId?: string;
   position: string;
   avatar?: string;
@@ -308,6 +308,29 @@ export const mockUsers: User[] = [
     avatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&h=150&fit=crop&crop=face',
     joinDate: '2022-02-08',
     country: 'Belgium',
+  },
+  // Admin Benutzer
+  {
+    id: '21',
+    name: 'Admin User',
+    email: 'admin@company.com',
+    department: 'IT',
+    role: 'admin',
+    position: 'System Administrator',
+    avatar: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=150&h=150&fit=crop&crop=face',
+    joinDate: '2020-01-01',
+    country: 'Germany',
+  },
+  {
+    id: '22',
+    name: 'Maria Admin',
+    email: 'maria.admin@company.com',
+    department: 'HR',
+    role: 'admin',
+    position: 'HR Administrator',
+    avatar: 'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=150&h=150&fit=crop&crop=face',
+    joinDate: '2021-03-15',
+    country: 'Germany',
   },
 ];
 

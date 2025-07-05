@@ -5,7 +5,12 @@ interface User {
   name: string;
   email: string;
   department: string;
-  role: string;
+  role: 'employee' | 'manager' | 'lms_manager' | 'admin';
+  managerId?: string;
+  position: string;
+  avatar?: string;
+  joinDate: string;
+  country: string;
 }
 
 interface AuthContextType {
@@ -26,28 +31,40 @@ const mockUsers = [
     name: 'Klaus Müller',
     email: 'klaus.mueller@company.com',
     department: 'Wartung',
-    role: 'employee'
+    role: 'employee' as const,
+    position: 'KFZ-Mechaniker',
+    joinDate: '2020-03-15',
+    country: 'Germany'
   },
   {
     id: '2',
     name: 'Hans Weber',
     email: 'hans.weber@company.com',
     department: 'Wartung',
-    role: 'employee'
+    role: 'employee' as const,
+    position: 'NFZ-Mechaniker',
+    joinDate: '2019-08-22',
+    country: 'Germany'
   },
   {
     id: '3',
     name: 'Peter Schmidt',
     email: 'peter.schmidt@company.com',
     department: 'Wartung',
-    role: 'employee'
+    role: 'employee' as const,
+    position: 'KFZ-Mechaniker',
+    joinDate: '2021-01-10',
+    country: 'Germany'
   },
   {
     id: '4',
     name: 'Michael Fischer',
     email: 'michael.fischer@company.com',
     department: 'Wartung',
-    role: 'employee'
+    role: 'employee' as const,
+    position: 'NFZ-Mechaniker',
+    joinDate: '2020-11-05',
+    country: 'Germany'
   },
   // Manager
   {
@@ -55,14 +72,20 @@ const mockUsers = [
     name: 'Thomas Wagner',
     email: 'thomas.wagner@company.com',
     department: 'Wartung',
-    role: 'manager'
+    role: 'manager' as const,
+    position: 'Wartungsleiter NFZ',
+    joinDate: '2018-06-12',
+    country: 'Germany'
   },
   {
     id: '6',
     name: 'Andreas Meyer',
     email: 'andreas.meyer@company.com',
     department: 'Wartung',
-    role: 'manager'
+    role: 'manager' as const,
+    position: 'Wartungsleiter KFZ',
+    joinDate: '2019-03-20',
+    country: 'Germany'
   },
   // LMS Manager
   {
@@ -70,14 +93,41 @@ const mockUsers = [
     name: 'Sarah Müller',
     email: 'sarah.mueller@company.com',
     department: 'HR',
-    role: 'lms_manager'
+    role: 'lms_manager' as const,
+    position: 'LMS Manager',
+    joinDate: '2020-09-01',
+    country: 'Germany'
   },
   {
     id: '8',
     name: 'Lisa Hoffmann',
     email: 'lisa.hoffmann@company.com',
     department: 'HR',
-    role: 'lms_manager'
+    role: 'lms_manager' as const,
+    position: 'LMS Manager',
+    joinDate: '2021-02-14',
+    country: 'Germany'
+  },
+  // Admin Benutzer
+  {
+    id: '21',
+    name: 'Admin User',
+    email: 'admin@company.com',
+    department: 'IT',
+    role: 'admin' as const,
+    position: 'System Administrator',
+    joinDate: '2020-01-01',
+    country: 'Germany'
+  },
+  {
+    id: '22',
+    name: 'Maria Admin',
+    email: 'maria.admin@company.com',
+    department: 'HR',
+    role: 'admin' as const,
+    position: 'HR Administrator',
+    joinDate: '2021-03-15',
+    country: 'Germany'
   }
 ];
 

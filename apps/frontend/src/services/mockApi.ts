@@ -268,8 +268,14 @@ export class MockApiService {
   // Mitarbeiter-Überwachung für LMS Manager
   async getAllEmployees(): Promise<User[]> {
     await delay(400);
-    // Nur Mitarbeiter und Manager zurückgeben (keine LMS Manager)
-    return mockUsers.filter(user => user.role === 'employee' || user.role === 'manager');
+    // Alle Benutzer zurückgeben (außer Admins für normale Ansicht)
+    return mockUsers.filter(user => user.role !== 'admin');
+  }
+
+  async getAllUsers(): Promise<User[]> {
+    await delay(400);
+    // Alle Benutzer inklusive Admins für Admin-Ansicht
+    return mockUsers;
   }
 
   async getEmployeeStats(userId: string): Promise<{

@@ -7,6 +7,7 @@ import Trainings from './pages/Trainings'
 import Profile from './pages/Profile'
 import Analytics from './pages/Analytics'
 import CreateTraining from './pages/CreateTraining'
+import Admin from './pages/Admin'
 import ProtectedRoute from './components/ProtectedRoute'
 
 function AppRoutes() {
@@ -27,6 +28,7 @@ function AppRoutes() {
         <Route path="trainings" element={<Trainings />} />
         <Route path="profile" element={<Profile />} />
         <Route path="analytics" element={<Analytics />} />
+        <Route path="admin" element={<Admin />} />
         <Route path="trainings/new" element={<CreateTraining />} />
       </Route>
     </Routes>

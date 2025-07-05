@@ -17,6 +17,7 @@ export const queryKeys = {
   trainingStats: () => ['trainings', 'stats'],
   searchTrainings: (query: string) => ['trainings', 'search', query],
   allEmployees: () => ['employees', 'all'],
+  allUsers: () => ['users', 'all'],
   employeeStats: (userId: string) => ['employee', 'stats', userId],
   employeeDetails: (userId: string) => ['employee', 'details', userId],
 };
@@ -238,6 +239,14 @@ export const useAllEmployees = () => {
   return useQuery({
     queryKey: queryKeys.allEmployees(),
     queryFn: () => mockApi.getAllEmployees(),
+    staleTime: 5 * 60 * 1000, // 5 Minuten
+  });
+};
+
+export const useAllUsers = () => {
+  return useQuery({
+    queryKey: queryKeys.allUsers(),
+    queryFn: () => mockApi.getAllUsers(),
     staleTime: 5 * 60 * 1000, // 5 Minuten
   });
 };
