@@ -11,13 +11,33 @@ import {
   BarChart3,
   Plus,
   Shield,
-  Users
+  Users,
+  CheckCircle
 } from 'lucide-react'
 import { toast } from 'react-hot-toast'
+import { useEffect, useRef, useState } from 'react'
+import { useUserNotifications } from '../hooks/useApi'
 
 const Layout: React.FC = () => {
   const { user, logout } = useAuth()
   const location = useLocation()
+  const [notifOpen, setNotifOpen] = useState(false)
+  const notifRef = useRef<HTMLDivElement>(null)
+  const { data: notifications = [] } = useUserNotifications(user?.id || '')
+
+  useEffect(() => {
+    function handleClickOutside(event: MouseEvent) {
+      if (notifRef.current && !notifRef.current.contains(event.target as Node)) {
+        setNotifOpen(false)
+      }
+    }
+    if (notifOpen) {
+      document.addEventListener('mousedown', handleClickOutside)
+    } else {
+      document.removeEventListener('mousedown', handleClickOutside)
+    }
+    return () => document.removeEventListener('mousedown', handleClickOutside)
+  }, [notifOpen])
 
   const handleLogout = () => {
     logout()
@@ -58,10 +78,48 @@ const Layout: React.FC = () => {
               <button className="p-2 text-gray-400 hover:text-gray-500" title="Suchen">
                 <Search className="h-5 w-5" />
               </button>
-              <button className="p-2 text-gray-400 hover:text-gray-500 relative" title="Benachrichtigungen">
-                <Bell className="h-5 w-5" />
-                <span className="absolute -top-1 -right-1 h-3 w-3 bg-red-500 rounded-full"></span>
-              </button>
+              <div className="relative" ref={notifRef}>
+                <button
+                  className="p-2 text-gray-400 hover:text-gray-500 relative"
+                  title="Benachrichtigungen"
+                  onClick={() => setNotifOpen((v) => !v)}
+                >
+                  <Bell className="h-5 w-5" />
+                  {notifications.some(n => !n.read) && (
+                    <span className="absolute -top-1 -right-1 h-3 w-3 bg-red-500 rounded-full"></span>
+                  )}
+                </button>
+                {notifOpen && (
+                  <div className="absolute right-0 mt-2 w-96 bg-white rounded-lg shadow-xl border border-gray-200 z-50">
+                    <div className="px-4 py-3 border-b border-gray-100 font-semibold text-gray-900">Benachrichtigungen</div>
+                    <div className="max-h-96 overflow-y-auto">
+                      {notifications.length === 0 && (
+                        <div className="p-4 text-gray-500 text-sm">Keine Benachrichtigungen</div>
+                      )}
+                      {notifications.slice(0, 8).map((n) => (
+                        <div
+                          key={n.id}
+                          className={`px-4 py-3 border-b border-gray-100 flex items-start gap-3 cursor-pointer hover:bg-gray-50 ${!n.read ? 'bg-blue-50' : ''}`}
+                          // Optional: onClick={() => ...}
+                        >
+                          <div className="mt-1">
+                            {n.type === 'reminder' ? <Bell className="h-5 w-5 text-yellow-500" /> :
+                             n.type === 'approval' ? <CheckCircle className="h-5 w-5 text-green-500" /> :
+                             n.type === 'rejection' ? <span className="inline-block w-5 h-5 rounded-full bg-red-200 text-red-600 flex items-center justify-center font-bold">!</span> :
+                             n.type === 'certificate' ? <BookOpen className="h-5 w-5 text-purple-500" /> :
+                             <BookOpen className="h-5 w-5 text-blue-500" />}
+                          </div>
+                          <div className="flex-1 min-w-0">
+                            <div className="font-medium text-gray-900 text-sm truncate">{n.title}</div>
+                            <div className="text-gray-600 text-sm break-words">{n.message}</div>
+                            <div className="text-xs text-gray-400 mt-1">{new Date(n.date).toLocaleString('de-DE')}</div>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
+              </div>
               <div className="flex items-center space-x-3">
                 <div className="text-sm">
                   <p className="text-gray-900 font-medium">{user?.name}</p>

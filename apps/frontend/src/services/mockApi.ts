@@ -137,7 +137,61 @@ export class MockApiService {
   // Benachrichtigungen
   async getUserNotifications(userId: string): Promise<Notification[]> {
     await delay(200);
-    return getMockUserNotifications(userId);
+    const notifications = getMockUserNotifications(userId);
+
+    // Automatische Erinnerungen für Trainings (in 3 Tagen)
+    const userRegistrations = getMockUserRegistrations(userId);
+    const now = new Date();
+    const trainingReminders: Notification[] = [];
+    userRegistrations.forEach(reg => {
+      if (reg.status === 'approved') {
+        const training = getMockTraining(reg.trainingId);
+        if (training) {
+          const trainingDate = new Date(training.date);
+          const diffDays = Math.ceil((trainingDate.getTime() - now.getTime()) / (1000 * 60 * 60 * 24));
+          if (diffDays === 3) {
+            trainingReminders.push({
+              id: `reminder_training_${training.id}`,
+              userId,
+              type: 'reminder',
+              title: 'Erinnerung: Anstehende Schulung',
+              message: `Ihre Schulung "${training.title}" startet in 3 Tagen. Bitte bereiten Sie sich vor. (E-Mail versendet an ${getMockUser(userId)?.email})`,
+              date: now.toISOString(),
+              read: false,
+              actionUrl: '/trainings',
+            });
+          }
+        }
+      }
+    });
+
+    // Automatische Erinnerungen für Zertifikate (in 30 Tagen)
+    const userCertificates = getMockUserCertificates(userId);
+    const certificateReminders: Notification[] = [];
+    userCertificates.forEach(cert => {
+      if (cert.expiryDate) {
+        const expiry = new Date(cert.expiryDate);
+        const diffDays = Math.ceil((expiry.getTime() - now.getTime()) / (1000 * 60 * 60 * 24));
+        if (diffDays === 30) {
+          certificateReminders.push({
+            id: `reminder_cert_${cert.id}`,
+            userId,
+            type: 'reminder',
+            title: 'Erinnerung: Zertifikat läuft bald ab',
+            message: `Ihr Zertifikat "${cert.title}" läuft in 30 Tagen ab. Bitte rechtzeitig erneuern. (E-Mail versendet an ${getMockUser(userId)?.email})`,
+            date: now.toISOString(),
+            read: false,
+            actionUrl: '/profile',
+          });
+        }
+      }
+    });
+
+    return [
+      ...notifications,
+      ...trainingReminders,
+      ...certificateReminders,
+    ];
   }
 
   async markNotificationAsRead(notificationId: string): Promise<boolean> {
