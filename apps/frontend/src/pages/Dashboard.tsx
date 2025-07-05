@@ -201,14 +201,12 @@ const Dashboard: React.FC = () => {
                               )}
                             </span>
                           </div>
-                          <div className="min-w-0 flex-1 pt-1.5 flex justify-between space-x-4">
-                            <div>
-                              <p className="text-sm text-gray-500">
-                                {notification.message}
-                              </p>
-                            </div>
-                            <div className="text-right text-sm whitespace-nowrap text-gray-500">
-                              <time>{new Date(notification.date).toLocaleDateString('de-DE')}</time>
+                          <div className="min-w-0 flex-1 pt-1.5">
+                            <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center">
+                              <p className="text-sm text-gray-700 break-words">{notification.message}</p>
+                              <span className="text-xs text-gray-400 mt-1 sm:mt-0 sm:ml-4 whitespace-nowrap">
+                                <time>{new Date(notification.date).toLocaleDateString('de-DE')}</time>
+                              </span>
                             </div>
                           </div>
                         </div>

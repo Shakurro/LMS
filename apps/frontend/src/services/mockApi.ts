@@ -6,6 +6,7 @@ import {
   mockNotifications,
   mockDashboardStats,
   mockCategories,
+  mockFeedbacks,
   getMockUser,
   getMockTraining,
   getMockUserRegistrations,
@@ -18,6 +19,7 @@ import {
   type TrainingRegistration,
   type Certificate,
   type Notification,
+  type TrainingFeedback,
 } from '../mocks/data';
 
 // Simuliere API-Verzögerung
@@ -393,6 +395,26 @@ export class MockApiService {
         completionRate,
       },
     };
+  }
+
+  // Feedback
+  async getFeedbacksForTraining(trainingId: string): Promise<TrainingFeedback[]> {
+    await delay(200);
+    return mockFeedbacks.filter(fb => fb.trainingId === trainingId);
+  }
+
+  async addFeedbackForTraining(trainingId: string, userId: string, rating: number, comment: string): Promise<TrainingFeedback> {
+    await delay(300);
+    const newFeedback: TrainingFeedback = {
+      id: `f${Date.now()}`,
+      trainingId,
+      userId,
+      rating,
+      comment,
+      date: new Date().toISOString().split('T')[0],
+    };
+    mockFeedbacks.push(newFeedback); // Im echten System: persistieren
+    return newFeedback;
   }
 }
 

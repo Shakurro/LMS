@@ -1,14 +1,21 @@
 import { useState, useEffect } from 'react'
 import { useSearchParams } from 'react-router-dom'
-import { BookOpen, Calendar, MapPin, Users, Clock, CheckCircle, Search, Filter } from 'lucide-react'
+import { BookOpen, Calendar, MapPin, Users, Clock, CheckCircle, Search, Filter, Star } from 'lucide-react'
 import { useTrainings, useCategories, useRegisterForTraining, useCurrentUser } from '../hooks/useApi'
 import { toast } from 'react-hot-toast'
+import { mockApi } from '../services/mockApi'
 
 const Trainings: React.FC = () => {
   const [searchParams, setSearchParams] = useSearchParams()
   const [selectedCategory, setSelectedCategory] = useState<string>('all')
   const [searchQuery, setSearchQuery] = useState<string>('')
   const [statusFilter, setStatusFilter] = useState<string>('')
+  const [feedbackModalOpen, setFeedbackModalOpen] = useState(false)
+  const [feedbackTrainingId, setFeedbackTrainingId] = useState<string | null>(null)
+  const [feedbackRating, setFeedbackRating] = useState(0)
+  const [feedbackComment, setFeedbackComment] = useState('')
+  const [feedbackSubmitting, setFeedbackSubmitting] = useState(false)
+  const [feedbackGiven, setFeedbackGiven] = useState<{[trainingId: string]: boolean}>({})
   
   const currentUserId = '1' // Mock user ID
   
@@ -44,6 +51,28 @@ const Trainings: React.FC = () => {
       })
     } catch (error) {
       console.error('Registration error:', error)
+    }
+  }
+
+  const handleOpenFeedback = (trainingId: string) => {
+    setFeedbackTrainingId(trainingId)
+    setFeedbackModalOpen(true)
+    setFeedbackRating(0)
+    setFeedbackComment('')
+  }
+
+  const handleSubmitFeedback = async () => {
+    if (!feedbackTrainingId || feedbackRating === 0) return
+    setFeedbackSubmitting(true)
+    try {
+      await mockApi.addFeedbackForTraining(feedbackTrainingId, currentUserId, feedbackRating, feedbackComment)
+      setFeedbackGiven(prev => ({ ...prev, [feedbackTrainingId]: true }))
+      setFeedbackModalOpen(false)
+      toast.success('Feedback gespeichert!')
+    } catch (e) {
+      toast.error('Fehler beim Speichern des Feedbacks')
+    } finally {
+      setFeedbackSubmitting(false)
     }
   }
 
@@ -281,6 +310,20 @@ const Trainings: React.FC = () => {
                       Ausgebucht
                     </div>
                   )}
+                  {training.status === 'completed' && !feedbackGiven[training.id] && (
+                    <button
+                      onClick={() => handleOpenFeedback(training.id)}
+                      className="w-full bg-yellow-500 text-white px-4 py-2 rounded-md hover:bg-yellow-600 focus:outline-none focus:ring-2 focus:ring-yellow-400 mt-2"
+                    >
+                      Feedback geben
+                    </button>
+                  )}
+                  {training.status === 'completed' && feedbackGiven[training.id] && (
+                    <div className="flex items-center justify-center text-sm text-green-600 mt-2">
+                      <CheckCircle className="h-4 w-4 mr-2" />
+                      Feedback abgegeben
+                    </div>
+                  )}
                 </div>
               </div>
             </div>
@@ -296,6 +339,50 @@ const Trainings: React.FC = () => {
           <p className="mt-1 text-sm text-gray-500">
             Versuchen Sie andere Suchkriterien oder Kategorien.
           </p>
+        </div>
+      )}
+
+      {/* Feedback Modal */}
+      {feedbackModalOpen && (
+        <div className="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50">
+          <div className="bg-white rounded-lg shadow-xl max-w-md w-full p-6">
+            <h3 className="text-lg font-semibold mb-4">Feedback zur Schulung</h3>
+            <div className="flex items-center mb-4">
+              {[1,2,3,4,5].map(star => (
+                <button
+                  key={star}
+                  onClick={() => setFeedbackRating(star)}
+                  className="focus:outline-none"
+                  title={`${star} Stern${star > 1 ? 'e' : ''}`}
+                >
+                  <Star className={`h-7 w-7 ${feedbackRating >= star ? 'text-yellow-400' : 'text-gray-300'}`} fill={feedbackRating >= star ? '#facc15' : 'none'} />
+                </button>
+              ))}
+            </div>
+            <textarea
+              className="w-full border border-gray-300 rounded-md p-2 mb-4"
+              rows={3}
+              placeholder="Ihr Kommentar (optional)"
+              value={feedbackComment}
+              onChange={e => setFeedbackComment(e.target.value)}
+            />
+            <div className="flex justify-end space-x-2">
+              <button
+                onClick={() => setFeedbackModalOpen(false)}
+                className="px-4 py-2 text-gray-600 hover:text-gray-800 border border-gray-300 rounded-md"
+                disabled={feedbackSubmitting}
+              >
+                Abbrechen
+              </button>
+              <button
+                onClick={handleSubmitFeedback}
+                className="px-4 py-2 bg-yellow-500 text-white rounded-md hover:bg-yellow-600 disabled:opacity-50"
+                disabled={feedbackSubmitting || feedbackRating === 0}
+              >
+                {feedbackSubmitting ? 'Speichern...' : 'Feedback speichern'}
+              </button>
+            </div>
+          </div>
         </div>
       )}
     </div>

@@ -68,6 +68,15 @@ export interface Notification {
   actionUrl?: string;
 }
 
+export interface TrainingFeedback {
+  id: string;
+  trainingId: string;
+  userId: string;
+  rating: number; // 1-5 Sterne
+  comment: string;
+  date: string;
+}
+
 // Mock-Benutzer
 export const mockUsers: User[] = [
   // Normale Mitarbeiter (Mechaniker)
@@ -675,4 +684,23 @@ export const getMockTrainingsByCategory = (category: string): Training[] => {
 
 export const getMockTrainingsByStatus = (status: string): Training[] => {
   return mockTrainings.filter(training => training.status === status);
-}; 
+};
+
+export const mockFeedbacks: TrainingFeedback[] = [
+  {
+    id: 'f1',
+    trainingId: '1',
+    userId: '1',
+    rating: 5,
+    comment: 'Sehr praxisnah und verständlich erklärt!',
+    date: '2024-05-01',
+  },
+  {
+    id: 'f2',
+    trainingId: '2',
+    userId: '2',
+    rating: 4,
+    comment: 'Gute Inhalte, aber etwas zu lang.',
+    date: '2024-05-03',
+  },
+]; 
