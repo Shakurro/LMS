@@ -1,0 +1,94 @@
+version: '3.8'
+
+services:
+  # PostgreSQL Database
+  postgres:
+    image: postgres:15-alpine
+    container_name: lms-postgres
+    environment:
+      POSTGRES_DB: lms
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - lms-network
+
+  # Redis Cache
+  redis:
+    image: redis:7-alpine
+    container_name: lms-redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    networks:
+      - lms-network
+
+  # Backend API
+  backend:
+    build:
+      context: .
+      dockerfile: apps/backend/Dockerfile
+    container_name: lms-backend
+    environment:
+      - NODE_ENV=production
+      - DB_HOST=postgres
+      - DB_PORT=5432
+      - DB_USERNAME=postgres
+      - DB_PASSWORD=password
+      - DB_DATABASE=lms
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+      - PORT=3001
+      - FRONTEND_URL=http://localhost:3000
+    ports:
+      - "3001:3001"
+    depends_on:
+      - postgres
+      - redis
+    networks:
+      - lms-network
+
+  # Frontend
+  frontend:
+    build:
+      context: .
+      dockerfile: apps/frontend/Dockerfile
+    container_name: lms-frontend
+    environment:
+      - VITE_API_URL=http://localhost:3001/api
+      - VITE_AZURE_CLIENT_ID=${AZURE_CLIENT_ID}
+      - VITE_AZURE_TENANT_ID=${AZURE_TENANT_ID}
+    ports:
+      - "3000:3000"
+    depends_on:
+      - backend
+    networks:
+      - lms-network
+
+  # Nginx Reverse Proxy
+  nginx:
+    image: nginx:alpine
+    container_name: lms-nginx
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./ssl:/etc/nginx/ssl:ro
+    depends_on:
+      - frontend
+      - backend
+    networks:
+      - lms-network
+
+volumes:
+  postgres_data:
+  redis_data:
+
+networks:
+  lms-network:
+    driver: bridge 

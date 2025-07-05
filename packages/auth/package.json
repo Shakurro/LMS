@@ -1,0 +1,29 @@
+{
+  "name": "@lms/auth",
+  "version": "1.0.0",
+  "description": "Authentifizierung Library für LMS - Microsoft Azure AD Integration",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "tsc",
+    "dev": "tsc --watch",
+    "clean": "rm -rf dist node_modules"
+  },
+  "dependencies": {
+    "@azure/msal-browser": "^3.7.0",
+    "@azure/msal-node": "^2.6.0",
+    "passport": "^0.7.0",
+    "passport-azure-ad": "^4.3.5",
+    "jsonwebtoken": "^9.0.2"
+  },
+  "devDependencies": {
+    "@types/passport": "^1.0.16",
+    "@types/passport-azure-ad": "^4.3.4",
+    "@types/jsonwebtoken": "^9.0.5",
+    "typescript": "^5.3.0"
+  },
+  "peerDependencies": {
+    "@nestjs/common": "^10.0.0",
+    "@nestjs/passport": "^10.0.3"
+  }
+} 

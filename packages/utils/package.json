@@ -1,0 +1,22 @@
+{
+  "name": "@lms/utils",
+  "version": "1.0.0",
+  "description": "Utility-Funktionen für LMS - Gemeinsame Hilfsfunktionen",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "tsc",
+    "dev": "tsc --watch",
+    "clean": "rm -rf dist node_modules"
+  },
+  "dependencies": {
+    "date-fns": "^2.30.0",
+    "zod": "^3.22.4",
+    "lodash": "^4.17.21"
+  },
+  "devDependencies": {
+    "@types/lodash": "^4.14.202",
+    "@types/node": "^20.10.0",
+    "typescript": "^5.3.0"
+  }
+} 
