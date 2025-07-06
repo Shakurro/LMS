@@ -7,6 +7,7 @@ import Trainings from './pages/Trainings'
 import Profile from './pages/Profile'
 import Analytics from './pages/Analytics'
 import CreateTraining from './pages/CreateTraining'
+import Calendar from './pages/Calendar'
 import Admin from './pages/Admin'
 import ProtectedRoute from './components/ProtectedRoute'
 
@@ -26,6 +27,7 @@ function AppRoutes() {
       >
         <Route index element={<Dashboard />} />
         <Route path="trainings" element={<Trainings />} />
+        <Route path="calendar" element={<Calendar />} />
         <Route path="profile" element={<Profile />} />
         <Route path="analytics" element={<Analytics />} />
         <Route path="admin" element={<Admin />} />

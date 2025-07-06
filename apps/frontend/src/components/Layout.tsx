@@ -12,7 +12,8 @@ import {
   Plus,
   Shield,
   Users,
-  CheckCircle
+  CheckCircle,
+  Calendar
 } from 'lucide-react'
 import { toast } from 'react-hot-toast'
 import { useEffect, useRef, useState } from 'react'
@@ -47,6 +48,7 @@ const Layout: React.FC = () => {
   const navigation = [
     { name: 'Dashboard', href: '/', icon: Home },
     { name: 'Schulungen', href: '/trainings', icon: GraduationCap },
+    { name: 'Kalender', href: '/calendar', icon: Calendar },
     { name: 'Profil', href: '/profile', icon: User },
   ]
 
