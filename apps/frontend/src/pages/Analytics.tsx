@@ -25,6 +25,7 @@ import {
   ChevronDown,
   ChevronRight
 } from 'lucide-react'
+import { useLayout } from '../contexts/LayoutContext'
 
 const Analytics: React.FC = () => {
   const { user } = useAuth()
@@ -38,6 +39,7 @@ const Analytics: React.FC = () => {
   const { data: trainingStats, isLoading: trainingStatsLoading } = useTrainingStats()
   const { data: employees, isLoading: employeesLoading } = useAllEmployees()
   const { data: selectedEmployeeStats } = useEmployeeStats(selectedEmployee || '')
+  const { theme } = useLayout()
 
   if (user?.role !== 'lms_manager') {
     return (
@@ -379,13 +381,13 @@ const Analytics: React.FC = () => {
                     placeholder="Mitarbeiter suchen..."
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
-                    className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                    className="bg-gray-50 border-gray-300 text-gray-900 placeholder-gray-400 focus:ring-blue-500 focus:border-blue-500"
                   />
                 </div>
               </div>
               <div className="flex items-center space-x-2">
                 <Globe className="h-4 w-4 text-gray-400" />
-                <span className="text-sm text-gray-600">
+                <span className="text-gray-500">
                   {Object.values(filteredEmployeesByCountry).flat().length} Mitarbeiter
                 </span>
               </div>
@@ -395,7 +397,7 @@ const Analytics: React.FC = () => {
           {/* Countries List */}
           <div className="space-y-4">
             {Object.entries(filteredEmployeesByCountry).map(([country, countryEmployees]) => (
-              <div key={country} className="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden">
+              <div key={country} className="bg-white p-6 rounded-lg shadow-sm border border-gray-200 overflow-hidden">
                 <button
                   onClick={() => toggleCountryExpansion(country)}
                   className="w-full px-6 py-4 flex items-center justify-between hover:bg-gray-50 transition-colors"
@@ -404,7 +406,7 @@ const Analytics: React.FC = () => {
                     <span className="text-2xl">{getCountryFlag(country)}</span>
                     <div>
                       <h3 className="text-lg font-semibold text-gray-900">{country}</h3>
-                      <p className="text-sm text-gray-600">{countryEmployees?.length || 0} Mitarbeiter</p>
+                      <p className="text-gray-500">{countryEmployees?.length || 0} Mitarbeiter</p>
                     </div>
                   </div>
                   {expandedCountries.has(country) ? (

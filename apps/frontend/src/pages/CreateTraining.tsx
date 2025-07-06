@@ -15,6 +15,7 @@ import {
   FileText,
   Target
 } from 'lucide-react'
+import { useLayout } from '../contexts/LayoutContext'
 
 interface TrainingFormData {
   title: string;
@@ -55,6 +56,8 @@ const CreateTraining: React.FC = () => {
   const [newTag, setNewTag] = useState('')
   const [newRequirement, setNewRequirement] = useState('')
   const [newObjective, setNewObjective] = useState('')
+
+  const { theme } = useLayout()
 
   if (user?.role !== 'lms_manager') {
     return (
@@ -152,14 +155,14 @@ const CreateTraining: React.FC = () => {
       </div>
 
       <form onSubmit={handleSubmit} className="max-w-4xl">
-        <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+        <div className="bg-white border border-gray-200 rounded-lg shadow-sm p-6">
           {/* Grundinformationen */}
           <div className="mb-8">
             <h2 className="text-xl font-semibold text-gray-900 mb-4">Grundinformationen</h2>
             
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label className="block text-sm font-medium mb-2">
                   Titel *
                 </label>
                 <input
@@ -167,13 +170,13 @@ const CreateTraining: React.FC = () => {
                   required
                   value={formData.title}
                   onChange={(e) => handleInputChange('title', e.target.value)}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="w-full px-3 py-2 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                   placeholder="z.B. Knorr-Bremsen Systeme"
                 />
               </div>
 
               <div>
-                <label htmlFor="category" className="block text-sm font-medium text-gray-700 mb-2">
+                <label htmlFor="category" className="block text-sm font-medium mb-2">
                   Kategorie *
                 </label>
                 <select
@@ -181,7 +184,7 @@ const CreateTraining: React.FC = () => {
                   required
                   value={formData.category}
                   onChange={(e) => handleInputChange('category', e.target.value)}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="w-full px-3 py-2 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                   aria-label="Kategorie auswählen"
                 >
                   <option value="">Kategorie auswählen</option>
@@ -192,7 +195,7 @@ const CreateTraining: React.FC = () => {
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label className="block text-sm font-medium mb-2">
                   Anbieter *
                 </label>
                 <input
@@ -200,13 +203,13 @@ const CreateTraining: React.FC = () => {
                   required
                   value={formData.provider}
                   onChange={(e) => handleInputChange('provider', e.target.value)}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="w-full px-3 py-2 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                   placeholder="z.B. Knorr-Bremse AG"
                 />
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label className="block text-sm font-medium mb-2">
                   Preis (€) *
                 </label>
                 <input
@@ -215,14 +218,14 @@ const CreateTraining: React.FC = () => {
                   min="0"
                   value={formData.price}
                   onChange={(e) => handleInputChange('price', parseInt(e.target.value) || 0)}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="w-full px-3 py-2 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                   placeholder="0"
                 />
               </div>
             </div>
 
             <div className="mt-6">
-              <label className="block text-sm font-medium text-gray-700 mb-2">
+              <label className="block text-sm font-medium mb-2">
                 Beschreibung *
               </label>
               <textarea
@@ -230,7 +233,7 @@ const CreateTraining: React.FC = () => {
                 rows={4}
                 value={formData.description}
                 onChange={(e) => handleInputChange('description', e.target.value)}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full px-3 py-2 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                 placeholder="Detaillierte Beschreibung der Schulung..."
               />
             </div>
@@ -242,7 +245,7 @@ const CreateTraining: React.FC = () => {
             
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div>
-                <label htmlFor="date" className="block text-sm font-medium text-gray-700 mb-2">
+                <label htmlFor="date" className="block text-sm font-medium mb-2">
                   Datum *
                 </label>
                 <input
@@ -251,13 +254,13 @@ const CreateTraining: React.FC = () => {
                   required
                   value={formData.date}
                   onChange={(e) => handleInputChange('date', e.target.value)}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="w-full px-3 py-2 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                   aria-label="Datum auswählen"
                 />
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label className="block text-sm font-medium mb-2">
                   Dauer *
                 </label>
                 <input
@@ -265,7 +268,7 @@ const CreateTraining: React.FC = () => {
                   required
                   value={formData.duration}
                   onChange={(e) => handleInputChange('duration', e.target.value)}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="w-full px-3 py-2 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                   placeholder="z.B. 2 Tage"
                 />
               </div>
@@ -273,7 +276,7 @@ const CreateTraining: React.FC = () => {
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label className="block text-sm font-medium mb-2">
                   Ort *
                 </label>
                 <input
@@ -281,13 +284,13 @@ const CreateTraining: React.FC = () => {
                   required
                   value={formData.location}
                   onChange={(e) => handleInputChange('location', e.target.value)}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="w-full px-3 py-2 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                   placeholder="z.B. Schulungszentrum Bremen"
                 />
               </div>
 
               <div>
-                <label htmlFor="country" className="block text-sm font-medium text-gray-700 mb-2">
+                <label htmlFor="country" className="block text-sm font-medium mb-2">
                   Land *
                 </label>
                 <select
@@ -295,7 +298,7 @@ const CreateTraining: React.FC = () => {
                   required
                   value={formData.country}
                   onChange={(e) => handleInputChange('country', e.target.value)}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="w-full px-3 py-2 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                   aria-label="Land auswählen"
                 >
                   <option value="">Land auswählen</option>
@@ -319,7 +322,7 @@ const CreateTraining: React.FC = () => {
             <h2 className="text-xl font-semibold text-gray-900 mb-4">Teilnehmer</h2>
             
             <div>
-              <label htmlFor="maxParticipants" className="block text-sm font-medium text-gray-700 mb-2">
+              <label htmlFor="maxParticipants" className="block text-sm font-medium mb-2">
                 Maximale Teilnehmerzahl *
               </label>
               <input
@@ -329,7 +332,7 @@ const CreateTraining: React.FC = () => {
                 min="1"
                 value={formData.maxParticipants}
                 onChange={(e) => handleInputChange('maxParticipants', parseInt(e.target.value) || 1)}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full px-3 py-2 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                 aria-label="Maximale Teilnehmerzahl eingeben"
               />
             </div>
@@ -345,7 +348,7 @@ const CreateTraining: React.FC = () => {
                 value={newTag}
                 onChange={(e) => setNewTag(e.target.value)}
                 onKeyPress={(e) => e.key === 'Enter' && (e.preventDefault(), addTag())}
-                className="flex-1 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="flex-1 px-3 py-2 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                 placeholder="Tag hinzufügen..."
               />
               <button
@@ -390,7 +393,7 @@ const CreateTraining: React.FC = () => {
                 value={newRequirement}
                 onChange={(e) => setNewRequirement(e.target.value)}
                 onKeyPress={(e) => e.key === 'Enter' && (e.preventDefault(), addRequirement())}
-                className="flex-1 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="flex-1 px-3 py-2 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                 placeholder="Voraussetzung hinzufügen..."
               />
               <button
@@ -407,7 +410,7 @@ const CreateTraining: React.FC = () => {
             <ul className="space-y-2">
               {formData.requirements.map(requirement => (
                 <li key={requirement} className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
-                  <span className="text-sm text-gray-700">{requirement}</span>
+                  <span className="text-sm">{requirement}</span>
                   <button
                     type="button"
                     onClick={() => removeRequirement(requirement)}
@@ -432,7 +435,7 @@ const CreateTraining: React.FC = () => {
                 value={newObjective}
                 onChange={(e) => setNewObjective(e.target.value)}
                 onKeyPress={(e) => e.key === 'Enter' && (e.preventDefault(), addObjective())}
-                className="flex-1 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="flex-1 px-3 py-2 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                 placeholder="Lernziel hinzufügen..."
               />
               <button
@@ -449,7 +452,7 @@ const CreateTraining: React.FC = () => {
             <ul className="space-y-2">
               {formData.learningObjectives.map(objective => (
                 <li key={objective} className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
-                  <span className="text-sm text-gray-700">{objective}</span>
+                  <span className="text-sm">{objective}</span>
                   <button
                     type="button"
                     onClick={() => removeObjective(objective)}

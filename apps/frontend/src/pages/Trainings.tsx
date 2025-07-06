@@ -4,6 +4,7 @@ import { BookOpen, Calendar, MapPin, Users, Clock, CheckCircle, Search, Filter, 
 import { useTrainings, useCategories, useRegisterForTraining, useCurrentUser } from '../hooks/useApi'
 import { toast } from 'react-hot-toast'
 import { mockApi } from '../services/mockApi'
+import { useLayout } from '../contexts/LayoutContext'
 
 const Trainings: React.FC = () => {
   const [searchParams, setSearchParams] = useSearchParams()
@@ -28,6 +29,8 @@ const Trainings: React.FC = () => {
   const registerMutation = useRegisterForTraining()
 
   const isLoading = trainingsLoading || categoriesLoading
+
+  const { theme } = useLayout()
 
   // Handle URL parameters on component mount
   useEffect(() => {
@@ -214,7 +217,7 @@ const Trainings: React.FC = () => {
                 placeholder="Schulungen suchen..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                className="bg-gray-50 border border-gray-300 text-gray-900 placeholder-gray-400 focus:ring-blue-500 focus:border-blue-500"
               />
             </div>
           </div>

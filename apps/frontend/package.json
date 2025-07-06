@@ -12,6 +12,7 @@
     "clean": "rm -rf dist node_modules"
   },
   "dependencies": {
+    "@azure/msal-react": "^3.0.14",
     "@lms/auth": "workspace:*",
     "@lms/ui-components": "workspace:*",
     "@lms/utils": "workspace:*",

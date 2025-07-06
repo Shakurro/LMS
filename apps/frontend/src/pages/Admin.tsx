@@ -19,6 +19,7 @@ import {
   XCircle
 } from 'lucide-react'
 import { User as UserType } from '../mocks/data'
+import { useLayout } from '../contexts/LayoutContext'
 
 const Admin: React.FC = () => {
   const { user } = useAuth()
@@ -30,6 +31,7 @@ const Admin: React.FC = () => {
   const [showDeleteConfirm, setShowDeleteConfirm] = useState<string | null>(null)
   
   const { data: employees, isLoading } = useAllUsers()
+  const { theme } = useLayout()
 
   if (user?.role !== 'admin') {
     return (
@@ -158,13 +160,13 @@ const Admin: React.FC = () => {
 
       {/* Stats Cards */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
-        <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
+        <div className="bg-white p-6 rounded-lg shadow-sm">
           <div className="flex items-center">
             <div className="p-2 bg-blue-100 rounded-lg">
               <Users className="h-6 w-6 text-blue-600" />
             </div>
             <div className="ml-4">
-              <p className="text-sm font-medium text-gray-600">Gesamt Benutzer</p>
+              <p className="text-sm font-medium text-gray-700">Gesamt Benutzer</p>
               <p className="text-2xl font-bold text-gray-900">
                 {employees?.length || 0}
               </p>
@@ -172,13 +174,13 @@ const Admin: React.FC = () => {
           </div>
         </div>
 
-        <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
+        <div className="bg-white p-6 rounded-lg shadow-sm">
           <div className="flex items-center">
             <div className="p-2 bg-green-100 rounded-lg">
               <User className="h-6 w-6 text-green-600" />
             </div>
             <div className="ml-4">
-              <p className="text-sm font-medium text-gray-600">Mitarbeiter</p>
+              <p className="text-sm font-medium text-gray-700">Mitarbeiter</p>
               <p className="text-2xl font-bold text-gray-900">
                 {employees?.filter(u => u.role === 'employee').length || 0}
               </p>
@@ -186,13 +188,13 @@ const Admin: React.FC = () => {
           </div>
         </div>
 
-        <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
+        <div className="bg-white p-6 rounded-lg shadow-sm">
           <div className="flex items-center">
             <div className="p-2 bg-purple-100 rounded-lg">
               <Shield className="h-6 w-6 text-purple-600" />
             </div>
             <div className="ml-4">
-              <p className="text-sm font-medium text-gray-600">Manager</p>
+              <p className="text-sm font-medium text-gray-700">Manager</p>
               <p className="text-2xl font-bold text-gray-900">
                 {employees?.filter(u => u.role === 'manager').length || 0}
               </p>
@@ -200,13 +202,13 @@ const Admin: React.FC = () => {
           </div>
         </div>
 
-        <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
+        <div className="bg-white p-6 rounded-lg shadow-sm">
           <div className="flex items-center">
             <div className="p-2 bg-red-100 rounded-lg">
               <Shield className="h-6 w-6 text-red-600" />
             </div>
             <div className="ml-4">
-              <p className="text-sm font-medium text-gray-600">Admins</p>
+              <p className="text-sm font-medium text-gray-700">Admins</p>
               <p className="text-2xl font-bold text-gray-900">
                 {employees?.filter(u => u.role === 'admin').length || 0}
               </p>
@@ -216,7 +218,7 @@ const Admin: React.FC = () => {
       </div>
 
       {/* Search and Filters */}
-      <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-200 mb-6">
+      <div className="bg-white p-6 rounded-lg shadow-sm mb-6">
         <div className="flex flex-col lg:flex-row gap-4">
           <div className="flex-1">
             <div className="relative">
@@ -226,7 +228,7 @@ const Admin: React.FC = () => {
                 placeholder="Benutzer suchen..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                className="bg-gray-50 border-gray-300 text-gray-900 placeholder-gray-400 focus:ring-blue-500 focus:border-blue-500 w-full pl-10 pr-4 py-2"
               />
             </div>
           </div>
@@ -235,7 +237,7 @@ const Admin: React.FC = () => {
             <select
               value={selectedRole}
               onChange={(e) => setSelectedRole(e.target.value)}
-              className="px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+              className="bg-gray-50 border-gray-300 text-gray-900 focus:ring-blue-500 focus:border-blue-500 px-3 py-2"
               title="Rolle filtern"
             >
               <option value="all">Alle Rollen</option>
@@ -248,7 +250,7 @@ const Admin: React.FC = () => {
             <select
               value={selectedCountry}
               onChange={(e) => setSelectedCountry(e.target.value)}
-              className="px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+              className="bg-gray-50 border-gray-300 text-gray-900 focus:ring-blue-500 focus:border-blue-500 px-3 py-2"
               title="Land filtern"
             >
               <option value="all">Alle Länder</option>
@@ -271,7 +273,7 @@ const Admin: React.FC = () => {
       </div>
 
       {/* Users Table */}
-      <div className="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden">
+      <div className="bg-white rounded-lg shadow-sm overflow-hidden">
         <div className="overflow-x-auto">
           <table className="min-w-full divide-y divide-gray-200">
             <thead className="bg-gray-50">
@@ -335,7 +337,7 @@ const Admin: React.FC = () => {
                     <div className="flex items-center space-x-2">
                       <button
                         onClick={() => handleEditUser(employee)}
-                        className="text-blue-600 hover:text-blue-900 flex items-center space-x-1"
+                        className="text-blue-600 hover:text-blue-900 flex items-center space-x-1 text-gray-900"
                       >
                         <Edit className="h-4 w-4" />
                         <span>Bearbeiten</span>
@@ -343,7 +345,7 @@ const Admin: React.FC = () => {
                       {employee.role !== 'admin' && (
                         <button
                           onClick={() => handleDeleteUser(employee.id)}
-                          className="text-red-600 hover:text-red-900 flex items-center space-x-1"
+                          className="text-red-600 hover:text-red-900 flex items-center space-x-1 text-gray-900"
                         >
                           <Trash2 className="h-4 w-4" />
                           <span>Löschen</span>

@@ -1,51 +1,33 @@
 import { useState } from 'react'
 import { useAuth } from '../contexts/AuthContext'
 import { 
-  Settings as SettingsIcon,
   User,
   Globe,
-  Bell,
   Cookie,
-  Save
+  ChevronDown
 } from 'lucide-react'
-import { toast } from 'react-hot-toast'
+import { useLayout } from '../contexts/LayoutContext'
 
 interface UserSettings {
   displayName: string
   email: string
   department: string
   position: string
-  theme: 'light' | 'dark' | 'system'
-  language: 'de' | 'en'
-  fontSize: 'small' | 'medium' | 'large'
-  emailNotifications: boolean
-  pushNotifications: boolean
-  trainingReminders: boolean
-  certificateExpiryAlerts: boolean
-  essentialCookies: boolean
-  analyticsCookies: boolean
-  marketingCookies: boolean
+  language: 'de' | 'en' | 'fr'
 }
 
 const Settings: React.FC = () => {
   const { user } = useAuth()
+  const { theme, setTheme } = useLayout()
   const [isSaving, setIsSaving] = useState(false)
   const [settings, setSettings] = useState<UserSettings>({
     displayName: user?.name || '',
     email: user?.email || '',
     department: user?.department || '',
     position: user?.position || '',
-    theme: 'system',
     language: 'de',
-    fontSize: 'medium',
-    emailNotifications: true,
-    pushNotifications: true,
-    trainingReminders: true,
-    certificateExpiryAlerts: true,
-    essentialCookies: true,
-    analyticsCookies: false,
-    marketingCookies: false
   })
+  const [themeDropdownOpen, setThemeDropdownOpen] = useState(false)
 
   const handleSettingChange = (key: keyof UserSettings, value: any) => {
     setSettings(prev => ({
@@ -54,263 +36,149 @@ const Settings: React.FC = () => {
     }))
   }
 
-  const handleSaveSettings = async () => {
-    setIsSaving(true)
-    try {
-      await new Promise(resolve => setTimeout(resolve, 1000))
-      toast.success('Einstellungen erfolgreich gespeichert!')
-    } catch (error) {
-      toast.error('Fehler beim Speichern der Einstellungen')
-    } finally {
-      setIsSaving(false)
-    }
+  const handleThemeChange = (newTheme: 'blue' | 'red') => {
+    setTheme(newTheme)
+    setThemeDropdownOpen(false)
+  }
+
+  const themeOptions = [
+    { value: 'blue', label: 'Klassisch (Blau)', description: 'Ursprüngliches Design', color: 'bg-blue-600' },
+    { value: 'red', label: 'TIP Group (Rot)', description: 'Neues Firmen-Design', color: 'bg-red-600' }
+  ]
+
+  const getCurrentThemeOption = () => {
+    return themeOptions.find(option => option.value === theme) || themeOptions[0]
   }
 
   return (
     <div className="p-6">
       <div className="mb-8">
-        <h1 className="text-3xl font-bold text-gray-900 mb-2 flex items-center">
-          <SettingsIcon className="h-8 w-8 mr-3" />
-          Einstellungen
-        </h1>
-        <p className="text-gray-600">
-          Verwalten Sie Ihre persönlichen Einstellungen und Präferenzen
-        </p>
+        <h1 className="text-3xl font-bold text-gray-900">Einstellungen</h1>
+        <p className="text-gray-600 mt-2">Verwalten Sie Ihre persönlichen Einstellungen und Präferenzen.</p>
       </div>
 
       <div className="max-w-4xl space-y-8">
         {/* Profil-Einstellungen (nur anzeigen, nicht editierbar) */}
-        <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+        <div className="rounded-lg border border-gray-200 bg-white p-6">
           <div className="flex items-center mb-6">
             <User className="h-5 w-5 text-blue-600 mr-2" />
             <h2 className="text-xl font-semibold text-gray-900">Profil-Einstellungen</h2>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">Anzeigename</label>
+              <label className="block text-sm font-medium mb-1 text-gray-700">Anzeigename</label>
               <input
                 type="text"
-                value={settings.displayName}
+                value={settings.displayName || '—'}
                 disabled
                 readOnly
-                className="w-full px-3 py-2 border border-gray-200 rounded-md bg-gray-100 text-gray-500 cursor-not-allowed"
+                className="w-full px-3 py-2 rounded-md bg-gray-50 border border-gray-300 text-gray-900"
               />
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">E-Mail</label>
+              <label className="block text-sm font-medium mb-1 text-gray-700">E-Mail</label>
               <input
                 type="email"
-                value={settings.email}
+                value={settings.email || '—'}
                 disabled
                 readOnly
-                className="w-full px-3 py-2 border border-gray-200 rounded-md bg-gray-100 text-gray-500 cursor-not-allowed"
+                className="w-full px-3 py-2 rounded-md bg-gray-50 border border-gray-300 text-gray-900"
               />
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">Abteilung</label>
+              <label className="block text-sm font-medium mb-1 text-gray-700">Abteilung</label>
               <input
                 type="text"
-                value={settings.department}
+                value={settings.department || '—'}
                 disabled
                 readOnly
-                className="w-full px-3 py-2 border border-gray-200 rounded-md bg-gray-100 text-gray-500 cursor-not-allowed"
+                className="w-full px-3 py-2 rounded-md bg-gray-50 border border-gray-300 text-gray-900"
               />
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">Position</label>
+              <label className="block text-sm font-medium mb-1 text-gray-700">Position</label>
               <input
                 type="text"
-                value={settings.position}
+                value={settings.position || '—'}
                 disabled
                 readOnly
-                className="w-full px-3 py-2 border border-gray-200 rounded-md bg-gray-100 text-gray-500 cursor-not-allowed"
+                className="w-full px-3 py-2 rounded-md bg-gray-50 border border-gray-300 text-gray-900"
               />
             </div>
           </div>
         </div>
 
         {/* Darstellung */}
-        <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+        <div className="rounded-lg border border-gray-200 bg-white p-6">
           <div className="flex items-center mb-6">
             <Globe className="h-5 w-5 text-purple-600 mr-2" />
             <h2 className="text-xl font-semibold text-gray-900">Darstellung</h2>
           </div>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div className="space-y-6">
+            {/* Theme Selection */}
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">Theme</label>
-              <select
-                value={settings.theme}
-                onChange={(e) => handleSettingChange('theme', e.target.value)}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                aria-label="Theme auswählen"
-              >
-                <option value="light">Hell</option>
-                <option value="dark">Dunkel</option>
-                <option value="system">System</option>
-              </select>
+              <label className="block text-sm font-medium mb-3 text-gray-700">Design Theme</label>
+              <div className="relative">
+                <button
+                  onClick={() => setThemeDropdownOpen(!themeDropdownOpen)}
+                  className="w-full flex items-center justify-between px-3 py-2 border border-gray-300 rounded-md bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                  aria-label="Theme auswählen"
+                >
+                  <div className="flex items-center space-x-3">
+                    <div className={`w-4 h-4 ${getCurrentThemeOption().color} rounded`}></div>
+                    <div className="text-left">
+                      <div className="font-medium text-gray-900">{getCurrentThemeOption().label}</div>
+                      <div className="text-sm text-gray-500">{getCurrentThemeOption().description}</div>
+                    </div>
+                  </div>
+                  <ChevronDown className={`h-5 w-5 text-gray-400 transition-transform ${themeDropdownOpen ? 'rotate-180' : ''}`} />
+                </button>
+                {themeDropdownOpen && (
+                  <div className="absolute z-10 w-full mt-1 bg-white border border-gray-200 rounded-md shadow-lg">
+                    {themeOptions.map((option) => (
+                      <button
+                        key={option.value}
+                        onClick={() => handleThemeChange(option.value as 'blue' | 'red')}
+                        className="w-full flex items-center space-x-3 px-3 py-2 hover:bg-gray-50 text-left"
+                        aria-label={`${option.label} auswählen`}
+                      >
+                        <div className={`w-4 h-4 ${option.color} rounded`}></div>
+                        <div>
+                          <div className="font-medium text-gray-900">{option.label}</div>
+                          <div className="text-sm text-gray-500">{option.description}</div>
+                        </div>
+                      </button>
+                    ))}
+                  </div>
+                )}
+              </div>
             </div>
+            {/* Language Selection */}
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">Sprache</label>
+              <label className="block text-sm font-medium mb-2 text-gray-700">Sprache</label>
               <select
                 value={settings.language}
                 onChange={(e) => handleSettingChange('language', e.target.value)}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full px-3 py-2 rounded-md bg-white border border-gray-300 text-gray-900 focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                 aria-label="Sprache auswählen"
               >
                 <option value="de">Deutsch</option>
                 <option value="en">English</option>
-              </select>
-            </div>
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">Schriftgröße</label>
-              <select
-                value={settings.fontSize}
-                onChange={(e) => handleSettingChange('fontSize', e.target.value)}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                aria-label="Schriftgröße auswählen"
-              >
-                <option value="small">Klein</option>
-                <option value="medium">Mittel</option>
-                <option value="large">Groß</option>
+                <option value="fr">Français</option>
               </select>
             </div>
           </div>
         </div>
 
-        {/* Benachrichtigungen (immer an, nicht editierbar) */}
-        <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
-          <div className="flex items-center mb-6">
-            <Bell className="h-5 w-5 text-yellow-600 mr-2" />
-            <h2 className="text-xl font-semibold text-gray-900">Benachrichtigungen</h2>
+        {/* Cookies & Datenschutz */}
+        <div className="rounded-lg border border-gray-200 bg-white p-6">
+          <div className="flex items-center mb-4">
+            <Cookie className="h-5 w-5 text-yellow-600 mr-2" />
+            <h2 className="text-xl font-semibold text-gray-900">Cookies & Datenschutz</h2>
           </div>
-          <div className="space-y-4">
-            <div className="flex items-center justify-between">
-              <div>
-                <h3 className="text-sm font-medium text-gray-900">E-Mail-Benachrichtigungen</h3>
-                <p className="text-sm text-gray-500">Erhalten Sie wichtige Updates per E-Mail</p>
-              </div>
-              <button
-                className="relative inline-flex h-6 w-11 items-center rounded-full bg-blue-600 cursor-not-allowed"
-                disabled
-                aria-label="E-Mail-Benachrichtigungen immer aktiviert"
-              >
-                <span className="inline-block h-4 w-4 transform rounded-full bg-white transition-transform translate-x-6" />
-              </button>
-            </div>
-            <div className="flex items-center justify-between">
-              <div>
-                <h3 className="text-sm font-medium text-gray-900">Push-Benachrichtigungen</h3>
-                <p className="text-sm text-gray-500">Sofortige Benachrichtigungen im Browser</p>
-              </div>
-              <button
-                className="relative inline-flex h-6 w-11 items-center rounded-full bg-blue-600 cursor-not-allowed"
-                disabled
-                aria-label="Push-Benachrichtigungen immer aktiviert"
-              >
-                <span className="inline-block h-4 w-4 transform rounded-full bg-white transition-transform translate-x-6" />
-              </button>
-            </div>
-            <div className="flex items-center justify-between">
-              <div>
-                <h3 className="text-sm font-medium text-gray-900">Schulungs-Erinnerungen</h3>
-                <p className="text-sm text-gray-500">Erinnerungen für anstehende Schulungen</p>
-              </div>
-              <button
-                className="relative inline-flex h-6 w-11 items-center rounded-full bg-blue-600 cursor-not-allowed"
-                disabled
-                aria-label="Schulungs-Erinnerungen immer aktiviert"
-              >
-                <span className="inline-block h-4 w-4 transform rounded-full bg-white transition-transform translate-x-6" />
-              </button>
-            </div>
-            <div className="flex items-center justify-between">
-              <div>
-                <h3 className="text-sm font-medium text-gray-900">Zertifikat-Ablauf-Warnungen</h3>
-                <p className="text-sm text-gray-500">Warnungen vor ablaufenden Zertifikaten</p>
-              </div>
-              <button
-                className="relative inline-flex h-6 w-11 items-center rounded-full bg-blue-600 cursor-not-allowed"
-                disabled
-                aria-label="Zertifikat-Ablauf-Warnungen immer aktiviert"
-              >
-                <span className="inline-block h-4 w-4 transform rounded-full bg-white transition-transform translate-x-6" />
-              </button>
-            </div>
-          </div>
-        </div>
-
-        {/* Cookie Settings */}
-        <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
-          <div className="flex items-center mb-6">
-            <Cookie className="h-5 w-5 text-orange-600 mr-2" />
-            <h2 className="text-xl font-semibold text-gray-900">Cookie-Einstellungen</h2>
-          </div>
-          <div className="space-y-4">
-            <div className="flex items-center justify-between">
-              <div>
-                <h3 className="text-sm font-medium text-gray-900">Notwendige Cookies</h3>
-                <p className="text-sm text-gray-500">Für die Grundfunktionen der Website erforderlich</p>
-              </div>
-              <div className="flex items-center text-sm text-gray-500">
-                <span>Immer aktiv</span>
-              </div>
-            </div>
-            <div className="flex items-center justify-between">
-              <div>
-                <h3 className="text-sm font-medium text-gray-900">Analyse-Cookies</h3>
-                <p className="text-sm text-gray-500">Helfen uns zu verstehen, wie die Website genutzt wird</p>
-              </div>
-              <button
-                onClick={() => handleSettingChange('analyticsCookies', !settings.analyticsCookies)}
-                className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${
-                  settings.analyticsCookies ? 'bg-blue-600' : 'bg-gray-200'
-                }`}
-                aria-label={`Analyse-Cookies ${settings.analyticsCookies ? 'deaktivieren' : 'aktivieren'}`}
-              >
-                <span className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${
-                  settings.analyticsCookies ? 'translate-x-6' : 'translate-x-1'
-                }`} />
-              </button>
-            </div>
-            <div className="flex items-center justify-between">
-              <div>
-                <h3 className="text-sm font-medium text-gray-900">Marketing-Cookies</h3>
-                <p className="text-sm text-gray-500">Für personalisierte Inhalte und Werbung</p>
-              </div>
-              <button
-                onClick={() => handleSettingChange('marketingCookies', !settings.marketingCookies)}
-                className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${
-                  settings.marketingCookies ? 'bg-blue-600' : 'bg-gray-200'
-                }`}
-                aria-label={`Marketing-Cookies ${settings.marketingCookies ? 'deaktivieren' : 'aktivieren'}`}
-              >
-                <span className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${
-                  settings.marketingCookies ? 'translate-x-6' : 'translate-x-1'
-                }`} />
-              </button>
-            </div>
-          </div>
-        </div>
-
-        {/* Action Button */}
-        <div className="flex justify-end">
-          <button
-            onClick={handleSaveSettings}
-            disabled={isSaving}
-            className="flex items-center px-6 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:opacity-50 disabled:cursor-not-allowed"
-          >
-            {isSaving ? (
-              <>
-                <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
-                Speichere...
-              </>
-            ) : (
-              <>
-                <Save className="h-4 w-4 mr-2" />
-                Einstellungen speichern
-              </>
-            )}
-          </button>
+          <p className="text-gray-700">
+            Diese Anwendung verwendet Cookies ausschließlich für die technische Funktionalität und zur Verbesserung des Nutzererlebnisses. Es werden keine Tracking- oder Werbe-Cookies eingesetzt.
+          </p>
         </div>
       </div>
     </div>

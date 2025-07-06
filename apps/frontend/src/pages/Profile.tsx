@@ -2,6 +2,7 @@ import { useMsal } from '@azure/msal-react'
 import { User, Mail, Building, Award, Upload, Download, Calendar, FileText, CheckCircle, Star, Clock } from 'lucide-react'
 import { useCurrentUser, useUserCertificates, useUserRegistrations, useCompletedTrainings } from '../hooks/useApi'
 import { useState } from 'react'
+import { useLayout } from '../contexts/LayoutContext'
 
 const Profile: React.FC = () => {
   const { accounts } = useMsal()
@@ -17,6 +18,8 @@ const Profile: React.FC = () => {
   const [selectedFile, setSelectedFile] = useState<File | null>(null)
 
   const isLoading = userLoading || certificatesLoading || registrationsLoading || completedTrainingsLoading
+
+  const { theme } = useLayout()
 
   const getStatusBadge = (status: string) => {
     switch (status) {
@@ -105,7 +108,7 @@ const Profile: React.FC = () => {
       </div>
 
       {/* Certificates Section */}
-      <div className="bg-white shadow rounded-lg">
+      <div className="bg-white overflow-hidden shadow rounded-lg">
         <div className="px-4 py-5 sm:p-6">
           <div className="flex items-center justify-between">
             <h3 className="text-lg leading-6 font-medium text-gray-900">
@@ -180,7 +183,7 @@ const Profile: React.FC = () => {
       </div>
 
       {/* Abgeschlossene Schulungen Section */}
-      <div className="bg-white shadow rounded-lg">
+      <div className="bg-white overflow-hidden shadow rounded-lg">
         <div className="px-4 py-5 sm:p-6">
           <div className="flex items-center justify-between">
             <h3 className="text-lg leading-6 font-medium text-gray-900">
@@ -285,18 +288,20 @@ const Profile: React.FC = () => {
       </div>
 
       {/* Workday Integration Info */}
-      <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
-        <div className="flex">
-          <div className="flex-shrink-0">
-            <Building className="h-5 w-5 text-blue-400" />
-          </div>
-          <div className="ml-3">
-            <h3 className="text-sm font-medium text-blue-800">Workday Integration</h3>
-            <div className="mt-2 text-sm text-blue-700">
-              <p>
-                Ihre Zertifikate werden automatisch in Ihr Workday-Profil übertragen und sind dort für
-                Manager und HR sichtbar.
-              </p>
+      <div className="bg-white overflow-hidden shadow rounded-lg">
+        <div className="px-4 py-5 sm:p-6">
+          <div className="flex">
+            <div className="flex-shrink-0">
+              <Building className="h-5 w-5 text-blue-400" />
+            </div>
+            <div className="ml-3">
+              <h3 className="text-sm font-medium text-blue-800">Workday Integration</h3>
+              <div className="mt-2 text-sm text-blue-700">
+                <p>
+                  Ihre Zertifikate werden automatisch in Ihr Workday-Profil übertragen und sind dort für
+                  Manager und HR sichtbar.
+                </p>
+              </div>
             </div>
           </div>
         </div>
