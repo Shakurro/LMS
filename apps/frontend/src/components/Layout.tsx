@@ -13,7 +13,8 @@ import {
   Shield,
   Users,
   CheckCircle,
-  Calendar
+  Calendar,
+  Settings
 } from 'lucide-react'
 import { toast } from 'react-hot-toast'
 import { useEffect, useRef, useState } from 'react'
@@ -50,6 +51,7 @@ const Layout: React.FC = () => {
     { name: 'Schulungen', href: '/trainings', icon: GraduationCap },
     { name: 'Kalender', href: '/calendar', icon: Calendar },
     { name: 'Profil', href: '/profile', icon: User },
+    { name: 'Einstellungen', href: '/settings', icon: Settings },
   ]
 
   // Zusätzliche Navigation für LMS Manager
