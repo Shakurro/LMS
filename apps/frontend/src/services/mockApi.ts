@@ -40,7 +40,7 @@ export class MockApiService {
   }
 
   // Schulungen
-  async getTrainings(category?: string, status?: string): Promise<Training[]> {
+  async getTrainings(category?: string, status?: string, country?: string): Promise<Training[]> {
     await delay(400);
     let filteredTrainings = mockTrainings;
 
@@ -52,6 +52,10 @@ export class MockApiService {
       filteredTrainings = filteredTrainings.filter(t => t.status === status);
     }
 
+    if (country) {
+      filteredTrainings = filteredTrainings.filter(t => t.country === country);
+    }
+
     return filteredTrainings;
   }
 
@@ -61,9 +65,15 @@ export class MockApiService {
     return training || null;
   }
 
-  async getAvailableTrainings(): Promise<Training[]> {
+  async getAvailableTrainings(country?: string): Promise<Training[]> {
     await delay(300);
-    return getMockTrainingsByStatus('available');
+    let availableTrainings = getMockTrainingsByStatus('available');
+    
+    if (country) {
+      availableTrainings = availableTrainings.filter(t => t.country === country);
+    }
+    
+    return availableTrainings;
   }
 
   async getRegisteredTrainings(userId: string): Promise<Training[]> {
@@ -469,6 +479,55 @@ export class MockApiService {
     };
     mockFeedbacks.push(newFeedback); // Im echten System: persistieren
     return newFeedback;
+  }
+
+  // Neue Funktion für abgeschlossene Schulungen
+  async getCompletedTrainings(userId: string): Promise<{
+    training: Training;
+    certificate?: Certificate;
+    completionDate: string;
+    grade?: string;
+    feedback?: string;
+  }[]> {
+    await delay(300);
+    
+    const userCertificates = getMockUserCertificates(userId);
+    const completedTrainings: {
+      training: Training;
+      certificate?: Certificate;
+      completionDate: string;
+      grade?: string;
+      feedback?: string;
+    }[] = [];
+
+    for (const certificate of userCertificates) {
+      const training = getMockTraining(certificate.trainingId);
+      if (training) {
+        completedTrainings.push({
+          training,
+          certificate,
+          completionDate: certificate.issueDate,
+          grade: 'Bestanden', // Mock-Grade
+          feedback: 'Schulung erfolgreich abgeschlossen',
+        });
+      }
+    }
+
+    // Füge auch Trainings hinzu, die als "completed" markiert sind, aber kein Zertifikat haben
+    const userRegistrations = getMockUserRegistrations(userId);
+    for (const registration of userRegistrations) {
+      const training = getMockTraining(registration.trainingId);
+      if (training && training.status === 'completed' && !userCertificates.find(c => c.trainingId === training.id)) {
+        completedTrainings.push({
+          training,
+          completionDate: training.date, // Verwende das Trainingsdatum als Abschlussdatum
+          grade: 'Bestanden',
+          feedback: 'Schulung erfolgreich abgeschlossen',
+        });
+      }
+    }
+
+    return completedTrainings.sort((a, b) => new Date(b.completionDate).getTime() - new Date(a.completionDate).getTime());
   }
 }
 

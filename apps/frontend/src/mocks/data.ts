@@ -21,6 +21,7 @@ export interface Training {
   date: string;
   duration: string;
   location: string;
+  country: string; // Neues Feld für das Land
   maxParticipants: number;
   currentParticipants: number;
   price: number;
@@ -353,6 +354,7 @@ export const mockTrainings: Training[] = [
     date: '2024-02-15',
     duration: '2 Tage',
     location: 'Schulungszentrum Bremen',
+    country: 'Germany',
     maxParticipants: 15,
     currentParticipants: 12,
     price: 850,
@@ -376,6 +378,7 @@ export const mockTrainings: Training[] = [
     date: '2024-02-20',
     duration: '1 Tag',
     location: 'Knorr-Bremse Schulungszentrum',
+    country: 'Germany',
     maxParticipants: 12,
     currentParticipants: 12,
     price: 650,
@@ -399,6 +402,7 @@ export const mockTrainings: Training[] = [
     date: '2024-02-25',
     duration: '3 Tage',
     location: 'Schmitz Cargobull Academy',
+    country: 'Germany',
     maxParticipants: 10,
     currentParticipants: 8,
     price: 1200,
@@ -422,6 +426,7 @@ export const mockTrainings: Training[] = [
     date: '2024-01-30',
     duration: '5 Tage',
     location: 'Firmengelände - Logistikzentrum',
+    country: 'Germany',
     maxParticipants: 8,
     currentParticipants: 8,
     price: 450,
@@ -445,6 +450,7 @@ export const mockTrainings: Training[] = [
     date: '2024-03-10',
     duration: '2 Tage',
     location: 'DEKRA Akademie Hamburg',
+    country: 'Germany',
     maxParticipants: 20,
     currentParticipants: 15,
     price: 750,
@@ -468,6 +474,7 @@ export const mockTrainings: Training[] = [
     date: '2024-03-15',
     duration: '1 Tag',
     location: 'Werkstatt Hauptstandort',
+    country: 'Germany',
     maxParticipants: 15,
     currentParticipants: 10,
     price: 350,
@@ -491,6 +498,7 @@ export const mockTrainings: Training[] = [
     date: '2024-03-20',
     duration: '2 Tage',
     location: 'Thermo King Service Center',
+    country: 'Germany',
     maxParticipants: 12,
     currentParticipants: 6,
     price: 950,
@@ -514,6 +522,7 @@ export const mockTrainings: Training[] = [
     date: '2024-03-25',
     duration: '1 Tag',
     location: 'Online (Webinar)',
+    country: 'Germany',
     maxParticipants: 25,
     currentParticipants: 18,
     price: 250,
@@ -526,6 +535,55 @@ export const mockTrainings: Training[] = [
       'Auswertung und Dokumentation',
       'Gesetzliche Vorgaben und Kontrollen',
       'Datenschutz und DSGVO'
+    ],
+    createdBy: '7',
+  },
+  // Österreichische Schulungen
+  {
+    id: '9',
+    title: 'Österreichische ADR Schulung',
+    description: 'ADR-Schulung speziell für österreichische Vorschriften. Theorie und Praxis für sicheren Gefahrguttransport.',
+    category: 'Sicherheit',
+    date: '2024-04-15',
+    duration: '2 Tage',
+    location: 'ÖAMTC Akademie Wien',
+    country: 'Austria',
+    maxParticipants: 15,
+    currentParticipants: 8,
+    price: 800,
+    provider: 'ÖAMTC',
+    status: 'available',
+    tags: ['ADR', 'Gefahrgut', 'Österreich', 'Transport'],
+    requirements: ['C/CE Führerschein', 'Sauberes Führungszeugnis'],
+    learningObjectives: [
+      'Österreichische ADR Vorschriften',
+      'Verpackung und Kennzeichnung',
+      'Sicherheitsmaßnahmen und Notfallverhalten',
+      'Dokumentation und Transportpapiere'
+    ],
+    createdBy: '8',
+  },
+  {
+    id: '10',
+    title: 'Österreichische KFZ-Wartung',
+    description: 'Grundlagen der Wartung und Pflege von Nutzfahrzeugen nach österreichischen Standards.',
+    category: 'Wartung',
+    date: '2024-04-20',
+    duration: '1 Tag',
+    location: 'Werkstatt Wien',
+    country: 'Austria',
+    maxParticipants: 12,
+    currentParticipants: 6,
+    price: 400,
+    provider: 'Interne Schulung',
+    status: 'available',
+    tags: ['Wartung', 'NFZ', 'Österreich', 'Inspektion'],
+    requirements: ['Grundkenntnisse KFZ-Technik'],
+    learningObjectives: [
+      'Österreichische Wartungsstandards',
+      'Ölwechsel und Filterwechsel',
+      'Inspektion von Bremsen und Reifen',
+      'Dokumentation und Wartungshistorie'
     ],
     createdBy: '7',
   },

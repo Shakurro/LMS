@@ -40,10 +40,10 @@ export const useUser = (userId: string) => {
 };
 
 // Schulungen Hooks
-export const useTrainings = (filters?: { category?: string; status?: string }) => {
+export const useTrainings = (filters?: { category?: string; status?: string; country?: string }) => {
   return useQuery({
     queryKey: queryKeys.trainings(filters),
-    queryFn: () => mockApi.getTrainings(filters?.category, filters?.status),
+    queryFn: () => mockApi.getTrainings(filters?.category, filters?.status, filters?.country),
     staleTime: 2 * 60 * 1000, // 2 Minuten
   });
 };
@@ -56,10 +56,10 @@ export const useTraining = (trainingId: string) => {
   });
 };
 
-export const useAvailableTrainings = () => {
+export const useAvailableTrainings = (country?: string) => {
   return useQuery({
-    queryKey: ['trainings', 'available'],
-    queryFn: () => mockApi.getAvailableTrainings(),
+    queryKey: ['trainings', 'available', country],
+    queryFn: () => mockApi.getAvailableTrainings(country),
     staleTime: 2 * 60 * 1000,
   });
 };
@@ -266,6 +266,16 @@ export const useEmployeeDetails = (userId: string) => {
     queryFn: () => mockApi.getEmployeeDetails(userId),
     enabled: !!userId,
     staleTime: 2 * 60 * 1000, // 2 Minuten
+  });
+};
+
+// Hook für abgeschlossene Schulungen
+export const useCompletedTrainings = (userId: string) => {
+  return useQuery({
+    queryKey: ['completedTrainings', userId],
+    queryFn: () => mockApi.getCompletedTrainings(userId),
+    enabled: !!userId,
+    staleTime: 5 * 60 * 1000, // 5 Minuten
   });
 };
  

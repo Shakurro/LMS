@@ -1,6 +1,6 @@
 import { useMsal } from '@azure/msal-react'
-import { User, Mail, Building, Award, Upload, Download, Calendar, FileText } from 'lucide-react'
-import { useCurrentUser, useUserCertificates, useUserRegistrations } from '../hooks/useApi'
+import { User, Mail, Building, Award, Upload, Download, Calendar, FileText, CheckCircle, Star, Clock } from 'lucide-react'
+import { useCurrentUser, useUserCertificates, useUserRegistrations, useCompletedTrainings } from '../hooks/useApi'
 import { useState } from 'react'
 
 const Profile: React.FC = () => {
@@ -12,10 +12,11 @@ const Profile: React.FC = () => {
   const { data: user, isLoading: userLoading } = useCurrentUser()
   const { data: certificates, isLoading: certificatesLoading } = useUserCertificates(currentUserId)
   const { data: registrations, isLoading: registrationsLoading } = useUserRegistrations(currentUserId)
+  const { data: completedTrainings, isLoading: completedTrainingsLoading } = useCompletedTrainings(currentUserId)
   
   const [selectedFile, setSelectedFile] = useState<File | null>(null)
 
-  const isLoading = userLoading || certificatesLoading || registrationsLoading
+  const isLoading = userLoading || certificatesLoading || registrationsLoading || completedTrainingsLoading
 
   const getStatusBadge = (status: string) => {
     switch (status) {
@@ -168,6 +169,111 @@ const Profile: React.FC = () => {
                             <Download className="h-4 w-4" />
                           </button>
                         )}
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+        </div>
+      </div>
+
+      {/* Abgeschlossene Schulungen Section */}
+      <div className="bg-white shadow rounded-lg">
+        <div className="px-4 py-5 sm:p-6">
+          <div className="flex items-center justify-between">
+            <h3 className="text-lg leading-6 font-medium text-gray-900">
+              Abgeschlossene Schulungen
+            </h3>
+            <div className="flex items-center text-sm text-gray-500">
+              <CheckCircle className="h-4 w-4 mr-1 text-green-500" />
+              {completedTrainings?.length || 0} Schulungen abgeschlossen
+            </div>
+          </div>
+
+          <div className="mt-6">
+            {!completedTrainings || completedTrainings.length === 0 ? (
+              <div className="text-center py-12">
+                <CheckCircle className="mx-auto h-12 w-12 text-gray-400" />
+                <h3 className="mt-2 text-sm font-medium text-gray-900">Keine abgeschlossenen Schulungen</h3>
+                <p className="mt-1 text-sm text-gray-500">
+                  Sie haben noch keine Schulungen abgeschlossen.
+                </p>
+              </div>
+            ) : (
+              <div className="space-y-4">
+                {completedTrainings.map((completedTraining) => (
+                  <div
+                    key={`${completedTraining.training.id}-${completedTraining.completionDate}`}
+                    className="border border-gray-200 rounded-lg p-4 hover:bg-gray-50"
+                  >
+                    <div className="flex items-start justify-between">
+                      <div className="flex-1">
+                                                 <div className="flex items-center space-x-2">
+                           <h4 className="text-sm font-medium text-gray-900">
+                             {completedTraining.training.title}
+                           </h4>
+                           {completedTraining.certificate && (
+                             <span title="Zertifikat verfügbar">
+                               <Award className="h-4 w-4 text-yellow-500" />
+                             </span>
+                           )}
+                         </div>
+                        <div className="mt-1 flex items-center space-x-4 text-sm text-gray-500">
+                          <span className="flex items-center">
+                            <Calendar className="h-4 w-4 mr-1" />
+                            Abgeschlossen: {new Date(completedTraining.completionDate).toLocaleDateString('de-DE')}
+                          </span>
+                          <span className="flex items-center">
+                            <Clock className="h-4 w-4 mr-1" />
+                            {completedTraining.training.duration}
+                          </span>
+                          <span className="flex items-center">
+                            <Building className="h-4 w-4 mr-1" />
+                            {completedTraining.training.provider}
+                          </span>
+                        </div>
+                        <div className="mt-2 flex items-center space-x-4 text-sm">
+                          <span className="flex items-center text-green-600">
+                            <CheckCircle className="h-4 w-4 mr-1" />
+                            {completedTraining.grade}
+                          </span>
+                          {completedTraining.certificate?.certificateNumber && (
+                            <span className="flex items-center text-blue-600">
+                              <FileText className="h-4 w-4 mr-1" />
+                              Zertifikat-Nr.: {completedTraining.certificate.certificateNumber}
+                            </span>
+                          )}
+                        </div>
+                        {completedTraining.certificate?.expiryDate && (
+                          <div className="mt-1 text-sm text-gray-500">
+                            <span className="flex items-center">
+                              <Calendar className="h-4 w-4 mr-1" />
+                              Gültig bis: {new Date(completedTraining.certificate.expiryDate).toLocaleDateString('de-DE')}
+                            </span>
+                          </div>
+                        )}
+                        <div className="mt-2 text-sm text-gray-600">
+                          <p className="font-medium">Kategorie: {completedTraining.training.category}</p>
+                          <p className="mt-1">{completedTraining.training.description}</p>
+                        </div>
+                      </div>
+                      <div className="flex items-center space-x-2">
+                        {completedTraining.certificate?.fileUrl && (
+                          <button 
+                            className="inline-flex items-center p-1 border border-transparent rounded-full text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+                            title="Zertifikat herunterladen"
+                          >
+                            <Download className="h-4 w-4" />
+                          </button>
+                        )}
+                        <button 
+                          className="inline-flex items-center p-1 border border-transparent rounded-full text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+                          title="Schulungsdetails anzeigen"
+                        >
+                          <Star className="h-4 w-4" />
+                        </button>
                       </div>
                     </div>
                   </div>

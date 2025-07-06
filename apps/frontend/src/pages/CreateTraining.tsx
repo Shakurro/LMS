@@ -23,6 +23,7 @@ interface TrainingFormData {
   date: string;
   duration: string;
   location: string;
+  country: string;
   maxParticipants: number;
   price: number;
   provider: string;
@@ -42,6 +43,7 @@ const CreateTraining: React.FC = () => {
     date: '',
     duration: '',
     location: '',
+    country: '',
     maxParticipants: 10,
     price: 0,
     provider: '',
@@ -171,14 +173,16 @@ const CreateTraining: React.FC = () => {
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label htmlFor="category" className="block text-sm font-medium text-gray-700 mb-2">
                   Kategorie *
                 </label>
                 <select
+                  id="category"
                   required
                   value={formData.category}
                   onChange={(e) => handleInputChange('category', e.target.value)}
                   className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  aria-label="Kategorie auswählen"
                 >
                   <option value="">Kategorie auswählen</option>
                   {categories.map(category => (
@@ -236,17 +240,19 @@ const CreateTraining: React.FC = () => {
           <div className="mb-8">
             <h2 className="text-xl font-semibold text-gray-900 mb-4">Termin & Ort</h2>
             
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label htmlFor="date" className="block text-sm font-medium text-gray-700 mb-2">
                   Datum *
                 </label>
                 <input
+                  id="date"
                   type="date"
                   required
                   value={formData.date}
                   onChange={(e) => handleInputChange('date', e.target.value)}
                   className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  aria-label="Datum auswählen"
                 />
               </div>
 
@@ -263,7 +269,9 @@ const CreateTraining: React.FC = () => {
                   placeholder="z.B. 2 Tage"
                 />
               </div>
+            </div>
 
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">
                   Ort *
@@ -277,6 +285,32 @@ const CreateTraining: React.FC = () => {
                   placeholder="z.B. Schulungszentrum Bremen"
                 />
               </div>
+
+              <div>
+                <label htmlFor="country" className="block text-sm font-medium text-gray-700 mb-2">
+                  Land *
+                </label>
+                <select
+                  id="country"
+                  required
+                  value={formData.country}
+                  onChange={(e) => handleInputChange('country', e.target.value)}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  aria-label="Land auswählen"
+                >
+                  <option value="">Land auswählen</option>
+                  <option value="Germany">Deutschland</option>
+                  <option value="Austria">Österreich</option>
+                  <option value="Switzerland">Schweiz</option>
+                  <option value="France">Frankreich</option>
+                  <option value="Italy">Italien</option>
+                  <option value="Spain">Spanien</option>
+                  <option value="Netherlands">Niederlande</option>
+                  <option value="Belgium">Belgien</option>
+                  <option value="Poland">Polen</option>
+                  <option value="Czech Republic">Tschechische Republik</option>
+                </select>
+              </div>
             </div>
           </div>
 
@@ -285,16 +319,18 @@ const CreateTraining: React.FC = () => {
             <h2 className="text-xl font-semibold text-gray-900 mb-4">Teilnehmer</h2>
             
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
+              <label htmlFor="maxParticipants" className="block text-sm font-medium text-gray-700 mb-2">
                 Maximale Teilnehmerzahl *
               </label>
               <input
+                id="maxParticipants"
                 type="number"
                 required
                 min="1"
                 value={formData.maxParticipants}
                 onChange={(e) => handleInputChange('maxParticipants', parseInt(e.target.value) || 1)}
                 className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                aria-label="Maximale Teilnehmerzahl eingeben"
               />
             </div>
           </div>
@@ -316,6 +352,8 @@ const CreateTraining: React.FC = () => {
                 type="button"
                 onClick={addTag}
                 className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                aria-label="Tag hinzufügen"
+                title="Tag hinzufügen"
               >
                 <Plus className="h-4 w-4" />
               </button>
@@ -332,6 +370,8 @@ const CreateTraining: React.FC = () => {
                     type="button"
                     onClick={() => removeTag(tag)}
                     className="ml-2 text-blue-600 hover:text-blue-800"
+                    aria-label={`Tag "${tag}" entfernen`}
+                    title={`Tag "${tag}" entfernen`}
                   >
                     <X className="h-3 w-3" />
                   </button>
@@ -357,6 +397,8 @@ const CreateTraining: React.FC = () => {
                 type="button"
                 onClick={addRequirement}
                 className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                aria-label="Voraussetzung hinzufügen"
+                title="Voraussetzung hinzufügen"
               >
                 <Plus className="h-4 w-4" />
               </button>
@@ -370,6 +412,8 @@ const CreateTraining: React.FC = () => {
                     type="button"
                     onClick={() => removeRequirement(requirement)}
                     className="text-red-600 hover:text-red-800"
+                    aria-label={`Voraussetzung "${requirement}" entfernen`}
+                    title={`Voraussetzung "${requirement}" entfernen`}
                   >
                     <X className="h-4 w-4" />
                   </button>
@@ -395,6 +439,8 @@ const CreateTraining: React.FC = () => {
                 type="button"
                 onClick={addObjective}
                 className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                aria-label="Lernziel hinzufügen"
+                title="Lernziel hinzufügen"
               >
                 <Plus className="h-4 w-4" />
               </button>
@@ -408,6 +454,8 @@ const CreateTraining: React.FC = () => {
                     type="button"
                     onClick={() => removeObjective(objective)}
                     className="text-red-600 hover:text-red-800"
+                    aria-label={`Lernziel "${objective}" entfernen`}
+                    title={`Lernziel "${objective}" entfernen`}
                   >
                     <X className="h-4 w-4" />
                   </button>

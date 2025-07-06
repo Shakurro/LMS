@@ -19,9 +19,12 @@ const Trainings: React.FC = () => {
   
   const currentUserId = '1' // Mock user ID
   
-  const { data: trainings, isLoading: trainingsLoading } = useTrainings({ category: selectedCategory })
-  const { data: categories, isLoading: categoriesLoading } = useCategories()
   const { data: currentUser } = useCurrentUser()
+  const { data: trainings, isLoading: trainingsLoading } = useTrainings({ 
+    category: selectedCategory,
+    country: currentUser?.country 
+  })
+  const { data: categories, isLoading: categoriesLoading } = useCategories()
   const registerMutation = useRegisterForTraining()
 
   const isLoading = trainingsLoading || categoriesLoading
@@ -154,10 +157,22 @@ const Trainings: React.FC = () => {
       {/* Header */}
       <div className="bg-white overflow-hidden shadow rounded-lg">
         <div className="px-4 py-5 sm:p-6">
-          <h1 className="text-2xl font-bold text-gray-900">Verfügbare Schulungen</h1>
-          <p className="mt-1 text-sm text-gray-500">
-            Entdecken Sie unsere externen Schulungsangebote und melden Sie sich an.
-          </p>
+          <div className="flex items-center justify-between">
+            <div>
+              <h1 className="text-2xl font-bold text-gray-900">Verfügbare Schulungen</h1>
+              <p className="mt-1 text-sm text-gray-500">
+                Entdecken Sie unsere externen Schulungsangebote und melden Sie sich an.
+              </p>
+            </div>
+            {currentUser?.country && (
+              <div className="flex items-center text-sm text-gray-600">
+                <MapPin className="h-4 w-4 mr-2" />
+                <span>
+                  Schulungen für: <span className="font-medium">{currentUser.country}</span>
+                </span>
+              </div>
+            )}
+          </div>
         </div>
       </div>
 
