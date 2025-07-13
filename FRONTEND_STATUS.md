@@ -58,7 +58,7 @@ apps/frontend/src/
 ### 📊 **Mock-Daten Features**
 
 #### **Benutzer**
-- 4 verschiedene Benutzer (Max Mustermann, Anna Schmidt, etc.)
+- 3 verschiedene Benutzer
 - Vollständige Profile mit Avatar, Abteilung, Position
 - Manager-Beziehungen
 

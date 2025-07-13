@@ -12,7 +12,7 @@ COPY packages/*/package.json ./packages/*/
 RUN npm install -g pnpm
 
 # Install dependencies
-RUN pnpm install --frozen-lockfile
+RUN pnpm install --no-frozen-lockfile
 
 # Copy source code
 COPY . .
@@ -32,7 +32,7 @@ COPY packages/*/package.json ./packages/*/
 
 # Install pnpm and production dependencies
 RUN npm install -g pnpm
-RUN pnpm install --frozen-lockfile --prod
+RUN pnpm install --no-frozen-lockfile --prod
 
 # Copy built application
 COPY --from=builder /app/apps/backend/dist ./apps/backend/dist
