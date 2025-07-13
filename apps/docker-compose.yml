@@ -1,10 +1,8 @@
-version: '3.8'
-
 services:
   frontend:
     build:
       context: .
-      dockerfile: frontend/Dockerfile
+      dockerfile: apps/frontend/Dockerfile
     container_name: lms-frontend
     restart: unless-stopped
     ports:
@@ -16,10 +14,4 @@ services:
       interval: 30s
       timeout: 10s
       retries: 3
-      start_period: 40s
-    networks:
-      - lms-network
-
-networks:
-  lms-network:
-    driver: bridge 
+      start_period: 40s 
