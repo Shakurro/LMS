@@ -30,7 +30,7 @@ RUN apk add --no-cache curl
 COPY --from=builder /app/apps/frontend/dist /usr/share/nginx/html
 
 # Copy nginx configuration
-COPY frontend/nginx.conf /etc/nginx/conf.d/default.conf
+COPY apps/frontend/nginx.conf /etc/nginx/conf.d/default.conf
 
 # Create nginx user
 RUN addgroup -g 1001 -S nginx && \
